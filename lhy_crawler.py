@@ -136,26 +136,17 @@ class Webtoon:
     @property
     def html(self):
         if not self._html:
-            # 인스턴스의 html속성값이 False(빈 문자열)일 경우
-            # HTML파일을 저장하거나 불러올 경로
             file_path = 'data/episode_list-{webtoon_id}.html'.format(webtoon_id=self.webtoon_id)
-            # HTTP요청을 보낼 주소
             url_episode_list = 'http://comic.naver.com/webtoon/list.nhn'
-            # HTTP요청시 전달할 GET Parameters
             params = {
                 'titleId': self.webtoon_id,
             }
-            # HTML파일이 로컬에 저장되어 있는지 검사
             if os.path.exists(file_path):
-                # 저장되어 있다면, 해당 파일을 읽어서 html변수에 할당
                 html = open(file_path, 'rt').read()
             else:
-                # 저장되어 있지 않다면, requests를 사용해 HTTP GET요청
                 response = requests.get(url_episode_list, params)
                 print(response.url)
-                # 요청 응답객체의 text속성값을 html변수에 할당
                 html = response.text
-                # 받은 텍스트 데이터를 HTML파일로 저장
                 open(file_path, 'wt').write(html)
             self._html = html
         return self._html
